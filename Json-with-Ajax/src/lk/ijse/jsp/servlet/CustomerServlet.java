@@ -31,10 +31,10 @@ public class CustomerServlet extends HttpServlet {
                 double salary = rst.getDouble(4);
 
                 JsonObjectBuilder customerObject = Json.createObjectBuilder();
-                customerObject.add("id",id);
-                customerObject.add("name",name);
-                customerObject.add("address",address);
-                customerObject.add("salary",salary);
+                customerObject.add("id", id);
+                customerObject.add("name", name);
+                customerObject.add("address", address);
+                customerObject.add("salary", salary);
                 allCustomers.add(customerObject.build());
             }
 
@@ -67,13 +67,13 @@ public class CustomerServlet extends HttpServlet {
                     pstm.setObject(2, cusName);
                     pstm.setObject(3, cusAddress);
                     pstm.setObject(4, cusSalary);
-                    resp.addHeader("Content-Type","application/json");
+                    resp.addHeader("Content-Type", "application/json");
 
                     if (pstm.executeUpdate() > 0) {
                         JsonObjectBuilder response = Json.createObjectBuilder();
-                        response.add("state","Ok");
-                        response.add("message","Successfully Added.!");
-                        response.add("data","");
+                        response.add("state", "Ok");
+                        response.add("message", "Successfully Added.!");
+                        response.add("data", "");
                         resp.getWriter().print(response.build());
                     }
                     break;
@@ -103,9 +103,9 @@ public class CustomerServlet extends HttpServlet {
 
         } catch (SQLException e) {
             JsonObjectBuilder response = Json.createObjectBuilder();
-            response.add("state","Error");
-            response.add("message",e.getMessage());
-            response.add("data","");
+            response.add("state", "Error");
+            response.add("message", e.getMessage());
+            response.add("data", "");
             resp.setStatus(400);
             resp.getWriter().print(response.build());
 
