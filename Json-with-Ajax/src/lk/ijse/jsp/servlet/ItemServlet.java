@@ -29,7 +29,7 @@ public class ItemServlet extends HttpServlet {
                 String name = rst.getString(2);
                 String qtyOnHand = rst.getString(3);
                 double unitPrice = rst.getDouble(4);
-                //allItems.add(new ItemDTO(code, name, qtyOnHand, unitPrice));
+                allItems.add(new ItemDTO(code, name, qtyOnHand, unitPrice));
             }
 
             req.setAttribute("keyTwo", allItems);
