@@ -9,10 +9,11 @@ public class CustomerDTO {
     public CustomerDTO() {
     }
 
-    public CustomerDTO(String id, String name, String address) {
+    public CustomerDTO(String id, String name, String address, double salary) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.salary = salary;
     }
 
     public String getId() {
@@ -47,10 +48,4 @@ public class CustomerDTO {
         this.salary = salary;
     }
 
-    public CustomerDTO(String id, String name, String address, double salary) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-        this.salary = salary;
-    }
 }

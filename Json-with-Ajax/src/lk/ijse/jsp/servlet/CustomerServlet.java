@@ -40,9 +40,7 @@ public class CustomerServlet extends HttpServlet {
 
             resp.getWriter().print(allCustomers.build());
 
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
 
