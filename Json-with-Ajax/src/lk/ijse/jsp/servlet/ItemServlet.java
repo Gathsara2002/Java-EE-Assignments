@@ -18,8 +18,8 @@ public class ItemServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/company", "root", "sanu1234");
-            PreparedStatement pstm = connection.prepareStatement("select * from Item");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
+            PreparedStatement pstm = connection.prepareStatement("select * from item");
             ResultSet rst = pstm.executeQuery();
 
             ArrayList<ItemDTO> allItems = new ArrayList<>();
@@ -27,18 +27,16 @@ public class ItemServlet extends HttpServlet {
             while (rst.next()) {
                 String code = rst.getString(1);
                 String name = rst.getString(2);
-                int qtyOnHand = rst.getInt(3);
+                String qtyOnHand = rst.getString(3);
                 double unitPrice = rst.getDouble(4);
-                allItems.add(new ItemDTO(code, name, qtyOnHand, unitPrice));
+                //allItems.add(new ItemDTO(code, name, qtyOnHand, unitPrice));
             }
 
             req.setAttribute("keyTwo", allItems);
 
             req.getRequestDispatcher("item.jsp").forward(req, resp);
 
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -55,10 +53,10 @@ public class ItemServlet extends HttpServlet {
 //
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/company", "root", "sanu1234");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
             switch (option) {
                 case "add":
-                    PreparedStatement pstm = connection.prepareStatement("insert into Item values(?,?,?,?)");
+                    PreparedStatement pstm = connection.prepareStatement("insert into item values(?,?,?,?)");
                     pstm.setObject(1, code);
                     pstm.setObject(2, itemName);
                     pstm.setObject(3, qty);
@@ -69,7 +67,7 @@ public class ItemServlet extends HttpServlet {
                     }
                     break;
                 case "delete":
-                    PreparedStatement pstm2 = connection.prepareStatement("delete from Item where code=?");
+                    PreparedStatement pstm2 = connection.prepareStatement("delete from item where code=?");
                     pstm2.setObject(1, code);
                     if (pstm2.executeUpdate() > 0) {
                         resp.getWriter().println("Item Deleted..!");
@@ -77,7 +75,7 @@ public class ItemServlet extends HttpServlet {
                     }
                     break;
                 case "update":
-                    PreparedStatement pstm3 = connection.prepareStatement("update Item set description=?,qtyOnHand=?,unitPrice=? where code=?");
+                    PreparedStatement pstm3 = connection.prepareStatement("update item set name=?,qty=?,price=? where code=?");
                     pstm3.setObject(1, itemName);
                     pstm3.setObject(2, qty);
                     pstm3.setObject(3, unitPrice);
@@ -88,9 +86,7 @@ public class ItemServlet extends HttpServlet {
                     }
                     break;
             }
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
     }
