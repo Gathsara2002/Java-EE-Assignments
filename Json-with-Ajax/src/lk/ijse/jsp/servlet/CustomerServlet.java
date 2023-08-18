@@ -19,37 +19,22 @@ public class CustomerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/company", "root", "sanu1234");
-            PreparedStatement pstm = connection.prepareStatement("select * from Customer");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
+            PreparedStatement pstm = connection.prepareStatement("select * from customer");
             ResultSet rst = pstm.executeQuery();
-//            resp.addHeader("Content-Type", "application/json");
-
-//            String json="[";
-//            while (rst.next()) {
-//                String customer="{";
-//                String id = rst.getString(1);
-//                String name = rst.getString(2);
-//                String address = rst.getString(3);
-//                customer+="\"id\":\""+id+"\",";
-//                customer+="\"name\":\""+name+"\",";
-//                customer+="\"address\":\""+address+"\"";
-//                customer+="},";
-//                json+=customer;
-//            }
-//            json=json+"]";
-//
-//            resp.getWriter().print(json.substring(0,json.length()-2)+"]");
 
             JsonArrayBuilder allCustomers = Json.createArrayBuilder();
             while (rst.next()) {
                 String id = rst.getString(1);
                 String name = rst.getString(2);
                 String address = rst.getString(3);
+                double salary = rst.getDouble(4);
 
                 JsonObjectBuilder customerObject = Json.createObjectBuilder();
                 customerObject.add("id",id);
                 customerObject.add("name",name);
                 customerObject.add("address",address);
+                customerObject.add("salary",salary);
                 allCustomers.add(customerObject.build());
             }
 
@@ -73,14 +58,15 @@ public class CustomerServlet extends HttpServlet {
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/company", "root", "sanu1234");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
 
             switch (option) {
                 case "add":
-                    PreparedStatement pstm = connection.prepareStatement("insert into Customer values(?,?,?)");
+                    PreparedStatement pstm = connection.prepareStatement("insert into customer values(?,?,?,?)");
                     pstm.setObject(1, cusID);
                     pstm.setObject(2, cusName);
                     pstm.setObject(3, cusAddress);
+                    pstm.setObject(4, cusSalary);
                     resp.addHeader("Content-Type","application/json");
 
                     if (pstm.executeUpdate() > 0) {
@@ -92,7 +78,7 @@ public class CustomerServlet extends HttpServlet {
                     }
                     break;
                 case "delete":
-                    PreparedStatement pstm2 = connection.prepareStatement("delete from Customer where id=?");
+                    PreparedStatement pstm2 = connection.prepareStatement("delete from customer where id=?");
                     pstm2.setObject(1, cusID);
                     if (pstm2.executeUpdate() > 0) {
                         resp.getWriter().println("Customer Deleted..!");
@@ -100,10 +86,11 @@ public class CustomerServlet extends HttpServlet {
 
                     break;
                 case "update":
-                    PreparedStatement pstm3 = connection.prepareStatement("update Customer set name=?,address=? where id=?");
-                    pstm3.setObject(3, cusID);
+                    PreparedStatement pstm3 = connection.prepareStatement("update customer set name=?,address=?,salary=? where id=?");
+                    pstm3.setObject(4, cusID);
                     pstm3.setObject(1, cusName);
                     pstm3.setObject(2, cusAddress);
+                    pstm3.setObject(3, cusSalary);
                     if (pstm3.executeUpdate() > 0) {
                         resp.getWriter().println("Customer Updated..!");
                     }
