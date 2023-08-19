@@ -75,14 +75,7 @@ public class CustomerServlet extends HttpServlet {
                         resp.getWriter().print(response.build());
                     }
                     break;
-              /*  case "delete":
-                    PreparedStatement pstm2 = connection.prepareStatement("delete from customer where id=?");
-                    pstm2.setObject(1, cusID);
-                    if (pstm2.executeUpdate() > 0) {
-                        resp.getWriter().println("Customer Deleted..!");
-                    }
 
-                    break;*/
                 case "update":
                     PreparedStatement pstm3 = connection.prepareStatement("update customer set name=?,address=?,salary=? where id=?");
                     pstm3.setObject(4, cusID);
