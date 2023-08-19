@@ -99,7 +99,6 @@ public class CustomerServlet extends HttpServlet {
             response.add("data", "");
             resp.setStatus(400);
             resp.getWriter().print(response.build());
-
         }
     }
 
@@ -113,11 +112,22 @@ public class CustomerServlet extends HttpServlet {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
             PreparedStatement pstm2 = connection.prepareStatement("delete from customer where id=?");
             pstm2.setObject(1, cusID);
+
             if (pstm2.executeUpdate() > 0) {
-                resp.getWriter().println("Customer Deleted..!");
+                JsonObjectBuilder response = Json.createObjectBuilder();
+                response.add("state", "Ok");
+                response.add("message", "Successfully Deleted.!");
+                response.add("data", "");
+                resp.getWriter().print(response.build());
             }
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("state", "Error");
+            response.add("message", e.getMessage());
+            response.add("data", "");
+            resp.setStatus(400);
+            resp.getWriter().print(response.build());
         }
     }
 }
