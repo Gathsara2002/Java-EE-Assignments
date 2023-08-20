@@ -123,6 +123,7 @@ public class CustomerServlet extends HttpServlet {
         String cusSalary = req.getParameter("cusSalary");
 
         try {
+
             Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
 

@@ -151,8 +151,13 @@
             url: "customer?cusID=" + id,
             method: "delete",
             success: function (resp) {
-                console.log(id);
+                console.log(resp);
+                alert(resp.message);
                 getAllCustomers();
+            },
+            error: function (error) {
+                console.log(error.responseJSON);
+                alert(error.responseJSON.message);
             }
         });
     });
@@ -168,10 +173,17 @@
             url: "customer?cusID=" + id + "&cusName=" + name + "&cusAddress=" + address + "&cusSalary=" + salary,
             method: 'put',
             success: function (resp) {
+                console.log(resp);
+                alert(resp.message);
                 getAllCustomers();
+            },
+            error: function (error) {
+                console.log(error.responseJSON);
+                alert(error.responseJSON.message);
             }
         });
     });
+
 </script>
 
 
