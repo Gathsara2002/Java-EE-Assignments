@@ -58,6 +58,7 @@ public class CustomerServlet extends HttpServlet {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
 
             PreparedStatement pstm = connection.prepareStatement("insert into customer values(?,?,?,?)");
+
             pstm.setObject(1, cusID);
             pstm.setObject(2, cusName);
             pstm.setObject(3, cusAddress);
@@ -94,6 +95,7 @@ public class CustomerServlet extends HttpServlet {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
+
             PreparedStatement pstm2 = connection.prepareStatement("delete from customer where id=?");
             pstm2.setObject(1, cusID);
 
@@ -137,7 +139,7 @@ public class CustomerServlet extends HttpServlet {
             if (pstm.executeUpdate() > 0) {
                 JsonObjectBuilder response = Json.createObjectBuilder();
                 response.add("state", "Ok");
-                response.add("message", "Successfully Deleted.!");
+                response.add("message", "Successfully Updated.!");
                 response.add("data", "");
                 resp.getWriter().print(response.build());
             }
@@ -149,11 +151,7 @@ public class CustomerServlet extends HttpServlet {
             response.add("data", "");
             resp.setStatus(400);
             resp.getWriter().print(response.build());
-
         }
-
     }
-
-
 }
 
