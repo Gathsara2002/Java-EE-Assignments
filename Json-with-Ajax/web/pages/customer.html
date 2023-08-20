@@ -158,11 +158,15 @@
     });
 
     $("#btnUpdate").click(function () {
-        let formData = $("#customerForm").serialize();
+
+        let id = $("#txtCustomerID").val();
+        let name = $("#txtCustomerName").val();
+        let address = $("#txtCustomerAddress").val();
+        let salary = $("#txtCustomerSalary").val();
+
         $.ajax({
-            url: 'customer?option=update',
-            method: 'post',
-            data: formData,
+            url: "customer?cusID=" + id + "&cusName=" + name + "&cusAddress=" + address + "&cusSalary=" + salary,
+            method: 'put',
             success: function (resp) {
                 getAllCustomers();
             }

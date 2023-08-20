@@ -52,40 +52,24 @@ public class CustomerServlet extends HttpServlet {
         String cusName = req.getParameter("cusName");
         String cusAddress = req.getParameter("cusAddress");
         String cusSalary = req.getParameter("cusSalary");
-        String option = req.getParameter("option");
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
 
-            switch (option) {
-                case "add":
-                    PreparedStatement pstm = connection.prepareStatement("insert into customer values(?,?,?,?)");
-                    pstm.setObject(1, cusID);
-                    pstm.setObject(2, cusName);
-                    pstm.setObject(3, cusAddress);
-                    pstm.setObject(4, cusSalary);
-                    resp.addHeader("Content-Type", "application/json");
+            PreparedStatement pstm = connection.prepareStatement("insert into customer values(?,?,?,?)");
+            pstm.setObject(1, cusID);
+            pstm.setObject(2, cusName);
+            pstm.setObject(3, cusAddress);
+            pstm.setObject(4, cusSalary);
+            resp.addHeader("Content-Type", "application/json");
 
-                    if (pstm.executeUpdate() > 0) {
-                        JsonObjectBuilder response = Json.createObjectBuilder();
-                        response.add("state", "Ok");
-                        response.add("message", "Successfully Added.!");
-                        response.add("data", "");
-                        resp.getWriter().print(response.build());
-                    }
-                    break;
-
-                case "update":
-                    PreparedStatement pstm3 = connection.prepareStatement("update customer set name=?,address=?,salary=? where id=?");
-                    pstm3.setObject(4, cusID);
-                    pstm3.setObject(1, cusName);
-                    pstm3.setObject(2, cusAddress);
-                    pstm3.setObject(3, cusSalary);
-                    if (pstm3.executeUpdate() > 0) {
-                        resp.getWriter().println("Customer Updated..!");
-                    }
-                    break;
+            if (pstm.executeUpdate() > 0) {
+                JsonObjectBuilder response = Json.createObjectBuilder();
+                response.add("state", "Ok");
+                response.add("message", "Successfully Added.!");
+                response.add("data", "");
+                resp.getWriter().print(response.build());
             }
 
 
@@ -130,5 +114,33 @@ public class CustomerServlet extends HttpServlet {
             resp.getWriter().print(response.build());
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String cusID = req.getParameter("cusID");
+        String cusName = req.getParameter("cusName");
+        String cusAddress = req.getParameter("cusAddress");
+        String cusSalary = req.getParameter("cusSalary");
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/pos", "root", "1234");
+
+            PreparedStatement pstm = connection.prepareStatement("update customer set name=?,address=?,salary=? where id=?");
+
+            pstm.setObject(4, cusID);
+            pstm.setObject(1, cusName);
+            pstm.setObject(2, cusAddress);
+            pstm.setObject(3, cusSalary);
+            if (pstm.executeUpdate() > 0) {
+                resp.getWriter().println("Customer Updated..!");
+            }
+        } catch (SQLException | ClassNotFoundException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
+
+
 }
 
