@@ -132,11 +132,23 @@ public class CustomerServlet extends HttpServlet {
             pstm.setObject(1, cusName);
             pstm.setObject(2, cusAddress);
             pstm.setObject(3, cusSalary);
+
             if (pstm.executeUpdate() > 0) {
-                resp.getWriter().println("Customer Updated..!");
+                JsonObjectBuilder response = Json.createObjectBuilder();
+                response.add("state", "Ok");
+                response.add("message", "Successfully Deleted.!");
+                response.add("data", "");
+                resp.getWriter().print(response.build());
             }
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            JsonObjectBuilder response = Json.createObjectBuilder();
+            response.add("state", "Error");
+            response.add("message", e.getMessage());
+            response.add("data", "");
+            resp.setStatus(400);
+            resp.getWriter().print(response.build());
+
         }
 
     }
